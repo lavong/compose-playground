@@ -2,4 +2,4 @@
 
 | explode animation                 |
 |-----------------------------------|
-| ![](assets/explode-animation.mp4) |
+| ![](assets/explode-animation.gif) |
