@@ -1,11 +1,12 @@
 package com.ingloriousmind.compose.playground
 
-import android.animation.TimeInterpolator
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -39,31 +40,16 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-fun TimeInterpolator.toEasing() = Easing { x -> getInterpolation(x) }
-
 @Composable
 fun ExplodeAnimationScreen() {
     var proceed by remember { mutableStateOf(false) }
-//    val animatedScale = animateFloatAsState(if (proceed) 10f else 1f, tween(800, easing = LinearOutSlowInEasing)) {
-//        println("done animating")
-//    }
-//    val animatedScale = animateFloatAsState(if (proceed) 10f else 1f, tween(800, easing = CubicBezierEasing(1.5f, 1f, .8f, 1.5f))) {
-//        println("done animating")
-//    }
-//    val animatedScale = animateFloatAsState(if (proceed) 10f else 1f, tween(800, easing = BounceInterpolator().toEasing())) {
-//        println("done animating")
-//    }
 
-    val transition = updateTransition(proceed, label = "")
+    val transition = updateTransition(proceed, label = "explosion")
     val animatedScale = transition.animateFloat(
-        transitionSpec = { tween(durationMillis = 800, easing = LinearOutSlowInEasing) },
-        label = "",
-    ) {
-        if (it) 10f else 1f
-    }
-    val animatedAlpha = transition.animateFloat({ tween(durationMillis = 200) }, label = "") {
-        if (it) 0f else 1f
-    }
+        transitionSpec = { tween(durationMillis = 300, easing = AnticipateEasing) },
+        label = "circle scale",
+    ) { if (it) 8f else 1f }
+    val animatedAlpha = transition.animateFloat(label = "checkmark visibility") { if (it) 0f else 1f }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
